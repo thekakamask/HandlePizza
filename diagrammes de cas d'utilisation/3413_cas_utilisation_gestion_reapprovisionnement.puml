@@ -1,0 +1,46 @@
+@startuml
+top to bottom direction
+skinparam packageStyle rectangle
+title Diagramme de cas d'utilisation de gestion du réapprovisionnement
+
+actor Manager
+actor "Patron / Direction" as Direction
+actor Fournisseur
+
+rectangle "Système HandlePizza" {
+  usecase "Exprimer les besoins\nen matières premières" as UC_ExpressNeeds
+  usecase "Générer une demande\nde réapprovisionnement" as UC_CreateSupplyRequest
+  usecase "Transmettre la commande\nau fournisseur" as UC_SendToSupplier
+  usecase "Recevoir la confirmation\nfournisseur" as UC_ReceiveConfirm
+  usecase "Enregistrer la livraison\nréceptionnée" as UC_RecordDelivery
+  usecase "Mettre à jour les stocks\naprès réapprovisionnement" as UC_UpdateStock
+  usecase "Contrôler la disponibilité\nproduit après réception" as UC_CheckAvailability
+  usecase "Déclencher une alerte\nrupture / seuil critique" as UC_StockAlert
+}
+
+Manager --> UC_ExpressNeeds
+Manager --> UC_CreateSupplyRequest
+Manager --> UC_RecordDelivery
+Manager --> UC_UpdateStock
+
+Direction --> UC_CreateSupplyRequest
+Direction --> UC_SendToSupplier
+Direction --> UC_RecordDelivery
+Direction --> UC_UpdateStock
+Direction --> UC_CheckAvailability
+
+Fournisseur --> UC_ReceiveConfirm
+Fournisseur --> UC_RecordDelivery
+
+UC_ExpressNeeds ..> UC_CreateSupplyRequest : <<include>>
+UC_CreateSupplyRequest ..> UC_SendToSupplier : <<include>>
+UC_SendToSupplier ..> UC_ReceiveConfirm : <<extend>>\nsi retour fournisseur
+UC_RecordDelivery ..> UC_UpdateStock : <<include>>
+UC_UpdateStock ..> UC_CheckAvailability : <<include>>
+UC_CheckAvailability ..> UC_StockAlert : <<extend>>\nsi seuil critique
+
+rectangle "Objectif : sécuriser la continuité\nde production et limiter les ruptures" as NOTE_SUPPLY
+NOTE_SUPPLY .. UC_UpdateStock
+NOTE_SUPPLY .. UC_CheckAvailability
+
+@enduml

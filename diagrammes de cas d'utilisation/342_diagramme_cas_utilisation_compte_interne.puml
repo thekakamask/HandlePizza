@@ -1,0 +1,40 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+title Diagramme de cas d'utilisation de gestion des comptes internes
+
+actor Manager
+actor "Patron / Direction" as Direction
+actor "Utilisateur interne\n(Employé, Pizzaiolo, Livreur)" as Interne
+
+rectangle "Système HandlePizza" {
+  usecase "S'authentifier" as UC_Auth
+  usecase "Créer un compte interne" as UC_Create
+  usecase "Modifier un compte interne" as UC_Update
+  usecase "Attribuer un rôle\net des droits d'accès" as UC_Rights
+  usecase "Consulter le profil\net les habilitations" as UC_View
+}
+
+Interne --> UC_Auth
+Manager --> UC_Auth
+Direction --> UC_Auth
+
+Manager --> UC_View
+Direction --> UC_View
+
+Manager --> UC_Create
+Manager --> UC_Update
+
+Direction --> UC_Create
+Direction --> UC_Update
+Direction --> UC_Rights
+
+UC_Create ..> UC_Rights : <<include>>
+UC_Update ..> UC_Rights : <<extend>>\nsi changement de fonction
+UC_View ..> UC_Auth : <<include>>
+
+rectangle "Manager : périmètre point de vente\nDirection : périmètre réseau global" as NOTE_SCOPE
+NOTE_SCOPE .. UC_Create
+NOTE_SCOPE .. UC_Rights
+
+@enduml

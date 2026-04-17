@@ -1,0 +1,42 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+
+start
+:Ouvrir le panier;
+:Verifier contenu et total;
+
+if (Panier vide ?) then (Oui)
+  :Afficher erreur panier vide;
+  stop
+else (Non)
+endif
+
+:Choisir mode de reception\n(livraison / retrait);
+
+if (Livraison ?) then (Oui)
+  :Saisir ou choisir adresse;
+else (Non)
+  :Confirmer retrait magasin;
+endif
+
+:Verifier disponibilite produits;
+
+if (Tous produits disponibles ?) then (Oui)
+  :Valider la commande;
+  :Creer Command;
+  :Affecter statut = confirmed;
+  :Transmettre au restaurant;
+  :Afficher confirmation commande;
+  stop
+else (Non)
+  :Afficher indisponibilite;
+  if (Modifier panier ?) then (Oui)
+    :Retour au panier;
+  else (Non)
+    :Annuler validation;
+  endif
+  stop
+endif
+@enduml

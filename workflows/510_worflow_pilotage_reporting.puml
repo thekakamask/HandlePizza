@@ -1,0 +1,28 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+
+start
+:Selectionner periode et perimetre\n(point de vente ou reseau);
+:Charger donnees commandes,\npaiements, stocks et livraisons;
+:Calculer indicateurs\n(volumes, delais, CA, ruptures);
+
+if (Profil manager ?) then (Oui)
+  :Afficher tableau de bord local;
+  :Identifier anomalies locales;
+  :Definir actions operationnelles;
+else (Non)
+  :Afficher tableau de bord multisites;
+  :Comparer performances magasins;
+  :Arbitrer priorites reseau;
+endif
+
+if (Exporter reporting ?) then (Oui)
+  :Generer export (PDF/CSV);
+else (Non)
+endif
+
+:Enregistrer suivi des decisions;
+stop
+@enduml

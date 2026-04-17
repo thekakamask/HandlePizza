@@ -1,0 +1,66 @@
+@startuml
+left to right direction
+skinparam classAttributeIconSize 0
+title HandlePizza - Diagramme de classe user et account
+
+class "account" as Account {
+  +first_name : String
+  +name : String
+  +email : String
+  +phone_number : String
+  +date_of_birth : Date
+  +account_name : String
+  +account_password : String
+}
+
+class "customer" as Customer {
+  +id_customer : Long
+  +client_picture : String [0..1]
+}
+
+class "employe" as Employe {
+  +id_employe : Long
+  +fonction : String
+}
+
+class "command_maker" as CommandMaker
+class "delivery_man" as DeliveryMan
+class "manager" as Manager
+class "boss" as Boss
+
+class "address" as Address {
+  +id_address : Long
+  +number_of_street : Integer
+  +street : String
+  +postal_code : Integer
+  +city : String
+  +additional_informations : String [0..1]
+}
+
+class "sales_point" as SalesPoint {
+  +id_sales_point : Long
+  +name : String
+  +is_open : Boolean
+}
+
+class "basket" as Basket {
+  +id_basket : Long
+  +created_at : DateTime
+  +updated_at : DateTime
+  +is_validated : Boolean
+}
+
+' Héritages alignés au global
+Account <|-- Customer
+Account <|-- Employe
+Employe <|-- CommandMaker
+Employe <|-- DeliveryMan
+Employe <|-- Manager
+Employe <|-- Boss
+
+' Relations alignées au global
+SalesPoint "1" o-- "1..*" Employe : affecte
+Customer "1..*" -- "1..*" Address
+Customer "1" o-- "0..*" Basket
+
+@enduml

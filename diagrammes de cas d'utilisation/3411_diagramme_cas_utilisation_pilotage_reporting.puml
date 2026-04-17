@@ -1,0 +1,44 @@
+@startuml
+top to bottom direction
+skinparam packageStyle rectangle
+title Diagramme de cas d'utilisation de pilotage et de reporting
+
+actor Manager
+actor "Patron / Direction" as Direction
+
+rectangle "Système HandlePizza" {
+  usecase "Consulter les indicateurs\nmagasin" as UC_ViewStoreKPIs
+  usecase "Consulter les indicateurs\nréseau (multisites)" as UC_ViewNetworkKPIs
+  usecase "Analyser les commandes,\ndélais et volumes" as UC_AnalyzeOps
+  usecase "Suivre la performance\nopérationnelle" as UC_TrackPerformance
+  usecase "Comparer les points\nde vente" as UC_CompareStores
+  usecase "Aider à la décision\net à l'arbitrage" as UC_DecisionSupport
+  usecase "Exporter / partager\nun reporting" as UC_ExportReport
+}
+
+Manager --> UC_ViewStoreKPIs
+Manager --> UC_AnalyzeOps
+Manager --> UC_TrackPerformance
+Manager --> UC_ExportReport
+
+Direction --> UC_ViewStoreKPIs
+Direction --> UC_ViewNetworkKPIs
+Direction --> UC_AnalyzeOps
+Direction --> UC_TrackPerformance
+Direction --> UC_CompareStores
+Direction --> UC_DecisionSupport
+Direction --> UC_ExportReport
+
+UC_ViewStoreKPIs ..> UC_AnalyzeOps : <<include>>
+UC_ViewNetworkKPIs ..> UC_AnalyzeOps : <<include>>
+UC_AnalyzeOps ..> UC_TrackPerformance : <<include>>
+UC_CompareStores ..> UC_ViewNetworkKPIs : <<include>>
+UC_DecisionSupport ..> UC_TrackPerformance : <<include>>
+UC_ExportReport ..> UC_ViewStoreKPIs : <<extend>>\nsi besoin de diffusion
+UC_ExportReport ..> UC_ViewNetworkKPIs : <<extend>>\nsi reporting réseau
+
+rectangle "Manager : pilotage local\nDirection : pilotage global multisites" as NOTE_REPORT
+NOTE_REPORT .. UC_ViewStoreKPIs
+NOTE_REPORT .. UC_ViewNetworkKPIs
+
+@enduml

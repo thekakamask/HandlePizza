@@ -1,0 +1,39 @@
+@startuml
+top to bottom direction
+skinparam packageStyle rectangle
+title Diagramme de cas d'utilisation de gestion du panier client
+
+actor "Acheteur" as Buyer
+actor Client
+actor "Employé" as Employe
+
+Client --|> Buyer
+Employe --|> Buyer
+
+rectangle "Système HandlePizza" {
+  usecase "Consulter le panier" as UC_ViewCart
+  usecase "Ajouter un article" as UC_AddItem
+  usecase "Modifier une quantité" as UC_UpdateQty
+  usecase "Supprimer un article" as UC_RemoveItem
+  usecase "Calculer le total" as UC_CalcTotal
+  usecase "Contrôler cohérence\n(quantités, disponibilité)" as UC_Check
+  usecase "Préparer les données\npour la commande" as UC_PrepareOrder
+}
+
+Buyer --> UC_ViewCart
+Buyer --> UC_AddItem
+Buyer --> UC_UpdateQty
+Buyer --> UC_RemoveItem
+Buyer --> UC_PrepareOrder
+
+UC_AddItem ..> UC_Check : <<include>>
+UC_UpdateQty ..> UC_Check : <<include>>
+UC_ViewCart ..> UC_CalcTotal : <<include>>
+UC_RemoveItem ..> UC_CalcTotal : <<include>>
+UC_PrepareOrder ..> UC_CalcTotal : <<include>>
+UC_PrepareOrder ..> UC_Check : <<include>>
+
+rectangle "Transition entre catalogue\net validation de commande" as NOTE_CART
+NOTE_CART .. UC_PrepareOrder
+
+@enduml

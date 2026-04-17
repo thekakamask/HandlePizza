@@ -1,0 +1,64 @@
+@startuml
+left to right direction
+skinparam classAttributeIconSize 0
+title HandlePizza - diagramme réapprovisionnement
+
+class "supplier" as Supplier {
+  +id_supplier : Long
+  +name : String
+  +email : String
+  +phone_number : String
+}
+
+class "supply_order" as SupplyOrder {
+  +id_supply_order : Long
+  +date : Date
+  +status : String
+}
+
+class "supply_order_ingredient" as SupplyOrderIngredient <<intertable>> {
+  +quantity : Float
+}
+
+class "ingredient" as Ingredient {
+  +id_ingredient : Long
+  +name : String
+}
+
+class "sales_point" as SalesPoint {
+  +id_sales_point : Long
+  +name : String
+  +is_open : Boolean
+}
+
+class "employe" as Employe {
+  +id_employe : Long
+  +fonction : String
+}
+
+class "manager" as Manager
+class "boss" as Boss
+
+enum "unity_type" as UnityType {
+  kg
+  l
+  u
+}
+
+' Aligné au diagramme global validé
+Employe <|-- Manager
+Employe <|-- Boss
+
+Supplier "1" -- "0..*" SupplyOrder
+SalesPoint "1" -- "0..*" SupplyOrder
+
+Manager "1" -- "0..*" SupplyOrder : cree_par
+Boss "0..1" -- "0..*" SupplyOrder : valide_par
+
+SupplyOrder "1" o-- "1..*" SupplyOrderIngredient
+SupplyOrder "*" -- "1..*" Ingredient
+(SupplyOrder, Ingredient) .. SupplyOrderIngredient
+
+SupplyOrderIngredient "1..*" -- "1" UnityType : unite_commande
+
+@enduml

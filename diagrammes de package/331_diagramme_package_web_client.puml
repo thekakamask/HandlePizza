@@ -1,0 +1,37 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+title HandlePizza - Package "Interface web client"
+
+actor Client
+actor "Système bancaire" as Banque
+
+package "Interface web client" as IWC {
+  package "Compte client" as P_Compte
+  package "Catalogue" as P_Catalogue
+  package "Panier" as P_Panier
+  package "Commande client" as P_Commande
+  package "Paiement en ligne" as P_Paiement
+  package "Suivi commande" as P_Suivi
+  package "Notification client" as P_Notif
+}
+
+' Acteurs -> package web client
+Client --> P_Catalogue : <<use>>
+Client --> P_Compte : <<use>>
+Client --> P_Panier : <<use>>
+Client --> P_Commande : <<use>>
+Client --> P_Paiement : <<use>>
+Client --> P_Suivi : <<use>>
+
+Banque --> P_Paiement : <<use>>
+
+' Dépendances internes
+P_Catalogue ..> P_Panier
+P_Compte ..> P_Commande
+P_Panier ..> P_Commande
+P_Commande ..> P_Paiement
+P_Commande ..> P_Suivi
+P_Commande ..> P_Notif
+P_Paiement ..> P_Notif
+@enduml

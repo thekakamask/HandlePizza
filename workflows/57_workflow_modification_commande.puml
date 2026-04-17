@@ -1,0 +1,37 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+
+start
+:Client demande modification/\nannulation de commande;
+:Rechercher la commande;
+
+if (Commande trouvee ?) then (Oui)
+  if (command_status = confirmed ?) then (Oui)
+    if (Type demande = modification ?) then (Oui)
+      :Modifier contenu commande;
+      :Recalculer montant;
+      :Mettre a jour commande;
+      :Envoyer confirmation au client;
+      stop
+    else (Non)
+      :Annuler commande;
+      :Mettre command_status = cancelled;
+      if (Paiement deja valide ?) then (Oui)
+        :Declencher procedure de remboursement;
+      else (Non)
+      endif
+      :Envoyer confirmation au client;
+      stop
+    endif
+  else (Non)
+    :Refuser demande\n(en preparation / en livraison / livree);
+    :Informer le client;
+    stop
+  endif
+else (Non)
+  :Afficher commande introuvable;
+  stop
+endif
+@enduml

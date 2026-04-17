@@ -1,0 +1,44 @@
+@startuml
+top to bottom direction
+skinparam packageStyle rectangle
+title Diagramme de cas d'utilisation de gestion des livraisons et retraits
+
+actor Client
+actor "Employé" as Employe
+actor Livreur
+
+rectangle "Système HandlePizza" {
+  usecase "Choisir le mode de remise\n(retrait / livraison)" as UC_ChooseMode
+  usecase "Remettre la commande\nau client (retrait)" as UC_HandoverPickup
+  usecase "Prendre en charge\nla livraison" as UC_TakeDelivery
+  usecase "Suivre la progression\nde livraison" as UC_TrackDelivery
+  usecase "Valider la remise\nau client" as UC_ValidateHandover
+  usecase "Encaisser en différé\n(si nécessaire)" as UC_DeferredPayment
+  usecase "Mettre à jour le statut\nde commande" as UC_UpdateStatus
+  usecase "Clôturer la commande" as UC_CloseOrder
+}
+
+Client --> UC_ChooseMode
+Client --> UC_TrackDelivery
+Client --> UC_ValidateHandover
+
+Employe --> UC_HandoverPickup
+Employe --> UC_DeferredPayment
+Employe --> UC_UpdateStatus
+
+Livreur --> UC_TakeDelivery
+Livreur --> UC_TrackDelivery
+Livreur --> UC_ValidateHandover
+Livreur --> UC_DeferredPayment
+Livreur --> UC_UpdateStatus
+
+UC_HandoverPickup ..> UC_ValidateHandover : <<include>>
+UC_TakeDelivery ..> UC_TrackDelivery : <<include>>
+UC_ValidateHandover ..> UC_UpdateStatus : <<include>>
+UC_DeferredPayment ..> UC_UpdateStatus : <<include>>
+UC_UpdateStatus ..> UC_CloseOrder : <<extend>>\nsi remise finalisée
+
+rectangle "Continuité entre fin de préparation\net clôture de commande" as NOTE_DELIVERY
+NOTE_DELIVERY .. UC_CloseOrder
+
+@enduml

@@ -1,0 +1,37 @@
+@startuml
+left to right direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+title Diagramme de contexte
+
+rectangle "Acteurs principaux" as AP {
+  actor Client
+  actor "Employé" as Employe
+  actor Pizzaiolo
+  actor Livreur
+  actor Manager
+  actor "Patron / Direction" as Direction
+}
+
+rectangle "HandlePizza\n(Système de gestion OC Pizza)" as SYS
+
+rectangle "Acteurs secondaires" as AS {
+  actor "Système bancaire" as Banque
+  actor Fournisseur
+}
+
+' Contraintes de placement (gauche -> centre -> droite)
+AP -[hidden]-> SYS
+SYS -[hidden]-> AS
+
+' Liens fonctionnels
+Client -right-> SYS : <<use>>
+Employe -right-> SYS : <<use>>
+Pizzaiolo -right-> SYS : <<use>>
+Livreur -right-> SYS : <<use>>
+Manager -right-> SYS : <<use>>
+Direction -right-> SYS : <<use>>
+
+Banque -left-> SYS : <<use>>
+Fournisseur -left-> SYS : <<use>>
+@enduml

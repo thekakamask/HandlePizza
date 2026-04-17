@@ -1,0 +1,43 @@
+@startuml
+top to bottom direction
+skinparam packageStyle rectangle
+title Diagramme de cas d'utilisation de gestion des paiements
+
+actor "Acheteur" as Buyer
+actor Client
+actor "Employé" as Employe
+actor Livreur
+actor "Système bancaire" as Banque
+
+Client --|> Buyer
+Employe --|> Buyer
+
+rectangle "Système HandlePizza" {
+  usecase "Choisir un mode de paiement" as UC_ChoosePayment
+  usecase "Payer en ligne" as UC_PayOnline
+  usecase "Payer en différé\n(sur place / à la livraison)" as UC_PayDeferred
+  usecase "Demander autorisation bancaire" as UC_BankAuth
+  usecase "Enregistrer le règlement" as UC_RecordPayment
+  usecase "Mettre à jour le statut de paiement" as UC_UpdateStatus
+  usecase "Émettre une confirmation\nde paiement" as UC_Confirm
+}
+
+Buyer --> UC_ChoosePayment
+Buyer --> UC_PayOnline
+Buyer --> UC_PayDeferred
+
+Employe --> UC_RecordPayment
+Livreur --> UC_RecordPayment
+
+Banque --> UC_BankAuth
+
+UC_PayOnline ..> UC_BankAuth : <<include>>
+UC_PayOnline ..> UC_RecordPayment : <<include>>
+UC_PayDeferred ..> UC_RecordPayment : <<extend>>\nsi paiement non effectué en ligne
+UC_RecordPayment ..> UC_UpdateStatus : <<include>>
+UC_RecordPayment ..> UC_Confirm : <<include>>
+
+rectangle "Traçabilité financière :\ncohérence commande / encaissement" as NOTE_PAY
+NOTE_PAY .. UC_RecordPayment
+
+@enduml

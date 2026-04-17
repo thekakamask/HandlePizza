@@ -1,0 +1,42 @@
+@startuml
+top to bottom direction
+skinparam packageStyle rectangle
+title Diagramme de cas d'utilisation de gestion des stocks
+
+actor Manager
+actor "Employé" as Employe
+actor Pizzaiolo
+actor "Patron / Direction" as Direction
+actor Fournisseur
+
+rectangle "Système HandlePizza" {
+  usecase "Consulter les stocks\npar point de vente" as UC_ViewStock
+  usecase "Mettre à jour les stocks\naprès vente" as UC_UpdateAfterSale
+  usecase "Mettre à jour les stocks\naprès réapprovisionnement" as UC_UpdateAfterSupply
+  usecase "Contrôler la disponibilité\nproduit" as UC_CheckAvailability
+  usecase "Déclencher une alerte\nstock faible" as UC_StockAlert
+  usecase "Ajuster le stock\n(correction manuelle)" as UC_AdjustStock
+  usecase "Synchroniser l'offre affichée\navec le stock réel" as UC_SyncOffer
+}
+
+Manager --> UC_ViewStock
+Manager --> UC_AdjustStock
+Manager --> UC_CheckAvailability
+
+Employe --> UC_ViewStock
+Pizzaiolo --> UC_ViewStock
+Direction --> UC_ViewStock
+Direction --> UC_CheckAvailability
+
+Fournisseur --> UC_UpdateAfterSupply
+
+UC_UpdateAfterSale ..> UC_CheckAvailability : <<include>>
+UC_UpdateAfterSupply ..> UC_CheckAvailability : <<include>>
+UC_CheckAvailability ..> UC_StockAlert : <<extend>>\nsi seuil atteint
+UC_CheckAvailability ..> UC_SyncOffer : <<include>>
+UC_AdjustStock ..> UC_CheckAvailability : <<include>>
+
+rectangle "Objectif : éviter la vente de produits\nnon réalisables" as NOTE_STOCK
+NOTE_STOCK .. UC_CheckAvailability
+
+@enduml

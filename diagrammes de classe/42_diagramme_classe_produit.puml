@@ -1,0 +1,34 @@
+@startuml
+left to right direction
+skinparam classAttributeIconSize 0
+title HandlePizza - Diagramme de classe produits
+
+class "pizza" as Pizza {
+  +id_pizza : Long
+  +name : String
+  +picture : String
+  +selling_price : Float
+  +receipt : String
+}
+
+class "ingredient" as Ingredient {
+  +id_ingredient : Long
+  +name : String
+}
+
+class "pizza_ingredient" as PizzaIngredient <<intertable>> {
+  +amount_by_pizza : Float
+}
+
+class "sales_point" as SalesPoint {
+  +id_sales_point : Long
+  +name : String
+  +is_open : Boolean
+}
+
+' Aligné au diagramme global validé
+SalesPoint "1" -- "0..*" Pizza
+Pizza "*" -- "1..*" Ingredient
+(Pizza, Ingredient) .. PizzaIngredient
+
+@enduml

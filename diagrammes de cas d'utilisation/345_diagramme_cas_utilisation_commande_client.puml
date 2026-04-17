@@ -1,0 +1,36 @@
+@startuml
+top to bottom direction
+skinparam packageStyle rectangle
+title Diagramme de cas d'utilisation de gestion de la commande client
+
+actor "Acheteur" as Buyer
+actor Client
+actor "Employé" as Employe
+
+Client --|> Buyer
+Employe --|> Buyer
+
+rectangle "Système HandlePizza" {
+  usecase "Créer une commande" as UC_CreateOrder
+  usecase "Valider la commande" as UC_ValidateOrder
+  usecase "Choisir le mode de réception\n(livraison / retrait)" as UC_ChooseMode
+  usecase "Saisir les informations\nopérationnelles" as UC_InputInfos
+  usecase "Affecter le statut initial\n(commande créée / confirmée)" as UC_SetStatus
+  usecase "Transmettre la commande\naux équipes opérationnelles" as UC_TransmitOps
+  usecase "Enregistrer la commande" as UC_SaveOrder
+}
+
+Buyer --> UC_CreateOrder
+Buyer --> UC_ValidateOrder
+Buyer --> UC_ChooseMode
+
+UC_CreateOrder ..> UC_InputInfos : <<include>>
+UC_ValidateOrder ..> UC_ChooseMode : <<include>>
+UC_ValidateOrder ..> UC_SaveOrder : <<include>>
+UC_ValidateOrder ..> UC_SetStatus : <<include>>
+UC_ValidateOrder ..> UC_TransmitOps : <<include>>
+
+rectangle "Passage panier -> commande exploitable\npar le restaurant" as NOTE_ORDER
+NOTE_ORDER .. UC_ValidateOrder
+
+@enduml

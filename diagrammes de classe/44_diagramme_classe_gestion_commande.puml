@@ -1,0 +1,92 @@
+@startuml
+left to right direction
+skinparam classAttributeIconSize 0
+title HandlePizza - Diagramme gestion des commandes
+
+class "command" as Command {
+  +id_command : Long
+  +command_status : command_status
+  +date : Date
+  +delivery_hours : Integer
+  +name : String
+  +payment_amount : Float
+  +payment_method : payment_method
+  +payment_status : payment_status
+}
+
+class "customer" as Customer {
+  +id_customer : Long
+  +client_picture : String [0..1]
+}
+
+class "address" as Address {
+  +id_address : Long
+  +number_of_street : Integer
+  +street : String
+  +postal_code : Integer
+  +city : String
+  +additional_informations : String [0..1]
+}
+
+class "employe" as Employe {
+  +id_employe : Long
+  +fonction : String
+}
+
+class "command_maker" as CommandMaker
+class "delivery_man" as DeliveryMan
+
+class "sales_point" as SalesPoint {
+  +id_sales_point : Long
+  +name : String
+  +is_open : Boolean
+}
+
+class "pizza" as Pizza {
+  +id_pizza : Long
+  +name : String
+  +selling_price : Float
+}
+
+class "command_pizza" as CommandPizza <<intertable>> {
+  +quantity_same_pizza : Integer
+}
+
+enum "command_status" as CommandStatus {
+  confirmed
+  in_preparation
+  in_delivery
+  delivered
+  cancelled
+}
+
+enum "payment_method" as PaymentMethod {
+  money
+  paypal
+  credit_card
+}
+
+enum "payment_status" as PaymentStatus {
+  in_progress
+  cancelled
+  validate
+}
+
+' Aligné au diagramme global validé
+Employe <|-- CommandMaker
+Employe <|-- DeliveryMan
+
+Customer "1" -- "0..*" Command
+Address "1" -- "0..*" Command
+Employe "1" -- "0..*" Command
+SalesPoint "1" o-- "0..*" Command
+
+Command "*" -- "1" CommandStatus
+Command "*" -- "1" PaymentMethod
+Command "*" -- "1" PaymentStatus
+
+Command "1" o-- "1..*" CommandPizza
+Command "*" -- "1..*" Pizza
+(Command, Pizza) .. CommandPizza
+
+@enduml

@@ -1,0 +1,77 @@
+@startuml
+left to right direction
+skinparam classAttributeIconSize 0
+title HandlePizza - Diagramme gestion de la livraison et du retrait
+
+class "command" as Command {
+  +id_command : Long
+  +command_status : command_status
+  +date : Date
+  +delivery_hours : Integer
+  +name : String
+  +payment_amount : Float
+  +payment_method : payment_method
+  +payment_status : payment_status
+}
+
+class "address" as Address {
+  +id_address : Long
+  +number_of_street : Integer
+  +street : String
+  +postal_code : Integer
+  +city : String
+  +additional_informations : String [0..1]
+}
+
+class "customer" as Customer {
+  +id_customer : Long
+  +client_picture : String [0..1]
+}
+
+class "employe" as Employe {
+  +id_employe : Long
+  +fonction : String
+}
+
+class "command_maker" as CommandMaker
+class "delivery_man" as DeliveryMan
+class "sales_point" as SalesPoint {
+  +id_sales_point : Long
+  +name : String
+  +is_open : Boolean
+}
+
+enum "command_status" as CommandStatus {
+  confirmed
+  in_preparation
+  in_delivery
+  delivered
+  cancelled
+}
+
+enum "payment_method" as PaymentMethod {
+  money
+  paypal
+  credit_card
+}
+
+enum "payment_status" as PaymentStatus {
+  in_progress
+  cancelled
+  validate
+}
+
+' Aligné au diagramme global validé
+Employe <|-- CommandMaker
+Employe <|-- DeliveryMan
+SalesPoint "1" o-- "0..*" Command : traite
+
+Customer "1" -- "0..*" Command : concerne
+Address "1" -- "0..*" Command : destination/retrait
+Employe "1" -- "0..*" Command : prise_en_charge
+
+Command "*" -- "1" CommandStatus : statut_logistique
+Command "*" -- "1" PaymentMethod
+Command "*" -- "1" PaymentStatus
+
+@enduml

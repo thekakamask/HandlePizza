@@ -1,0 +1,41 @@
+@startuml
+left to right direction
+skinparam classAttributeIconSize 0
+title HandlePizza - Diagramme points de vente et équipes
+
+class "sales_point" as SalesPoint {
+  +id_sales_point : Long
+  +name : String
+  +is_open : Boolean
+}
+
+class "employe" as Employe {
+  +id_employe : Long
+  +fonction : String
+}
+
+class "account" as Account {
+  +first_name : String
+  +name : String
+  +email : String
+  +phone_number : String
+  +date_of_birth : Date
+  +account_name : String
+  +account_password : String
+}
+
+class "command_maker" as CommandMaker
+class "delivery_man" as DeliveryMan
+class "manager" as Manager
+class "boss" as Boss
+
+' Aligné au diagramme global validé
+Account <|-- Employe
+Employe <|-- CommandMaker
+Employe <|-- DeliveryMan
+Employe <|-- Manager
+Employe <|-- Boss
+
+SalesPoint "1" o-- "1..*" Employe : affecte
+
+@enduml

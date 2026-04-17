@@ -1,0 +1,37 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+
+start
+:Verifier niveaux de stock;
+
+if (Stock sous seuil ?) then (Oui)
+  :Manager identifie les besoins;
+  :Creer SupplyOrder;
+  :Ajouter ingredients + quantites + unites;
+  :Envoyer commande au fournisseur;
+
+  if (Validation boss requise ?) then (Oui)
+    :Boss valide la commande;
+  else (Non)
+  endif
+
+  :Attendre livraison fournisseur;
+  :Receptionner livraison;
+  :Controler conformite (quantite/unite);
+
+  if (Livraison conforme ?) then (Oui)
+    :Mettre a jour stocks;
+    :Cloturer SupplyOrder;
+  else (Non)
+    :Signaler ecart fournisseur;
+    :Mettre SupplyOrder en litige;
+  endif
+
+else (Non)
+  :Aucun reapprovisionnement necessaire;
+endif
+
+stop
+@enduml

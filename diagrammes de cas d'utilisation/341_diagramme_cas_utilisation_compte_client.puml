@@ -1,0 +1,37 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+title Diagramme de cas d'utilisation de gestion du compte client
+
+actor Client
+actor "Employé" as Employe
+
+rectangle "Système HandlePizza" {
+  usecase "S'authentifier" as UC_Auth
+  usecase "Créer un compte client" as UC_Create
+  usecase "Mettre à jour\nles informations personnelles" as UC_Update
+  usecase "Gérer les adresses client" as UC_Address
+  usecase "Récupérer un compte existant" as UC_Recover
+  usecase "Rechercher / sélectionner\nun client" as UC_Select
+}
+
+Client --> UC_Auth
+Client --> UC_Create
+Client --> UC_Update
+Client --> UC_Address
+Client --> UC_Recover
+
+Employe --> UC_Select
+Employe --> UC_Create
+
+UC_Create ..> UC_Auth : <<extend>>\nsi client inconnu
+UC_Update ..> UC_Auth : <<include>>
+UC_Address ..> UC_Auth : <<include>>
+UC_Recover ..> UC_Auth : <<extend>>\nsi accès impossible
+UC_Select ..> UC_Auth : <<include>>
+
+rectangle "Utilisé par l'employé lors d'une\ncommande magasin / téléphone" as NOTE_EMP
+NOTE_EMP .. UC_Create
+NOTE_EMP .. UC_Select
+
+@enduml

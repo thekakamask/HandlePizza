@@ -1,0 +1,37 @@
+@startuml
+left to right direction
+skinparam classAttributeIconSize 0
+title HandlePizza - Diagramme gestion des stocks d'ingrédients
+
+class "sales_point" as SalesPoint {
+  +id_sales_point : Long
+  +name : String
+  +is_open : Boolean
+}
+
+class "ingredient" as Ingredient {
+  +id_ingredient : Long
+  +name : String
+}
+
+class "unity_type" as UnityType <<enumeration>> {
+  +id_unity_type : Long
+  +name : String
+}
+
+class "unity_quantity_stock" as UnityQuantityStock <<intertable>> {
+  +name : String
+  +limit_quantity : Boolean
+  +purchasing_price_per_unit : Float
+  +amount : Float
+  +type_unity_type : String
+}
+
+' Aligné au diagramme global validé
+SalesPoint "1" o-- "0..*" UnityQuantityStock : stocke
+SalesPoint "1" -- "1..*" Ingredient
+(SalesPoint, Ingredient) .. UnityQuantityStock
+
+UnityQuantityStock "1..*" -- "1" UnityType : unite
+
+@enduml

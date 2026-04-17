@@ -1,0 +1,37 @@
+@startuml
+top to bottom direction
+skinparam packageStyle rectangle
+title Diagramme de cas d'utilisation de gestion de la préparation
+
+actor Pizzaiolo
+actor "Employé" as Employe
+actor Manager
+
+rectangle "Système HandlePizza" {
+  usecase "Consulter les commandes\nà préparer" as UC_ViewPrepOrders
+  usecase "Prendre en charge\nune commande" as UC_PickOrder
+  usecase "Consulter l'aide-mémoire\nrecettes" as UC_ViewRecipes
+  usecase "Mettre à jour la progression\nde fabrication" as UC_UpdateProgress
+  usecase "Déclarer la fin\nde préparation" as UC_FinishPrep
+  usecase "Mettre à jour le statut\npour remise / livraison" as UC_UpdateStatus
+  usecase "Ordonner les priorités\nde production" as UC_ProductionOrder
+}
+
+Pizzaiolo --> UC_ViewPrepOrders
+Pizzaiolo --> UC_PickOrder
+Pizzaiolo --> UC_ViewRecipes
+Pizzaiolo --> UC_UpdateProgress
+Pizzaiolo --> UC_FinishPrep
+
+Employe --> UC_ViewPrepOrders
+Manager --> UC_ProductionOrder
+
+UC_PickOrder ..> UC_ProductionOrder : <<include>>
+UC_UpdateProgress ..> UC_UpdateStatus : <<include>>
+UC_FinishPrep ..> UC_UpdateStatus : <<include>>
+UC_FinishPrep ..> UC_ViewRecipes : <<extend>>\nsi vérification recette nécessaire
+
+rectangle "Objectif : ordonnancement cuisine\n+ statut prêt pour remise/livraison" as NOTE_PREP
+NOTE_PREP .. UC_FinishPrep
+
+@enduml

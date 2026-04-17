@@ -1,0 +1,30 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+
+start
+:Declencheur stock\n(validation commande ou reception fournisseur);
+
+if (Validation commande ?) then (Oui)
+  :Lire lignes de commande;
+  :Calculer consommation via recettes\n(PizzaIngredient);
+  :Deduire les quantites du stock\n(UnityQuantityStock);
+else (Non)
+  :Lire lignes de reapprovisionnement;
+  :Ajouter les quantites receptionnees\nau stock;
+endif
+
+:Verifier seuils de stock;
+
+if (Stock sous seuil ?) then (Oui)
+  :Activer limit_quantity;
+  :Generer alerte reapprovisionnement;
+else (Non)
+  :Maintenir etat normal;
+endif
+
+:Mettre a jour disponibilite produits;
+:Enregistrer trace de mise a jour stock;
+stop
+@enduml

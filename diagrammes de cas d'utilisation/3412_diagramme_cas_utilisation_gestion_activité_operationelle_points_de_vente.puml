@@ -1,0 +1,46 @@
+@startuml
+top to bottom direction
+skinparam packageStyle rectangle
+title Diagramme de cas d'utilisation de gestion de l'activité opérationnelle et des points de vente
+
+actor Manager
+actor "Patron / Direction" as Direction
+actor "Employé" as Employe
+actor Pizzaiolo
+actor Livreur
+
+rectangle "Système HandlePizza" {
+  usecase "Paramétrer l'exploitation\nlocale du point de vente" as UC_LocalConfig
+  usecase "Gérer les informations\ndu point de vente" as UC_StoreInfo
+  usecase "Suivre les flux\nde commandes" as UC_OrderFlow
+  usecase "Coordonner les rôles\nterrain" as UC_RoleCoord
+  usecase "Affecter les tâches\nopérationnelles" as UC_AssignTasks
+  usecase "Standardiser les pratiques\nd'exploitation" as UC_Standardize
+  usecase "Adapter le pilotage\nau magasin" as UC_LocalSteering
+}
+
+Manager --> UC_LocalConfig
+Manager --> UC_StoreInfo
+Manager --> UC_OrderFlow
+Manager --> UC_RoleCoord
+Manager --> UC_AssignTasks
+Manager --> UC_LocalSteering
+
+Direction --> UC_StoreInfo
+Direction --> UC_Standardize
+Direction --> UC_LocalSteering
+
+Employe --> UC_OrderFlow
+Pizzaiolo --> UC_OrderFlow
+Livreur --> UC_OrderFlow
+
+UC_RoleCoord ..> UC_AssignTasks : <<include>>
+UC_LocalConfig ..> UC_StoreInfo : <<include>>
+UC_LocalSteering ..> UC_OrderFlow : <<include>>
+UC_Standardize ..> UC_LocalConfig : <<extend>>\nsi harmonisation réseau
+
+rectangle "Objectif : homogénéiser les pratiques\nsans perdre l'adaptation locale" as NOTE_OPS
+NOTE_OPS .. UC_Standardize
+NOTE_OPS .. UC_LocalSteering
+
+@enduml

@@ -1,0 +1,38 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+
+start
+:Commande prete;
+
+if (Mode retrait ?) then (Oui)
+  :Appeler le client;
+  :Remettre la commande au comptoir;
+
+  if (Paiement differe ?) then (Oui)
+    :Encaisser au comptoir;
+    :Mettre payment_status = validate;
+  else (Non)
+  endif
+
+  :Mettre command_status = delivered;
+  stop
+
+else (Non)
+  :Affecter commande au livreur;
+  :Livreur prend en charge;
+  :Mettre command_status = in_delivery;
+  :Suivre progression livraison;
+  :Remettre la commande au client;
+
+  if (Paiement differe ?) then (Oui)
+    :Encaisser a la livraison;
+    :Mettre payment_status = validate;
+  else (Non)
+  endif
+
+  :Mettre command_status = delivered;
+  stop
+endif
+@enduml

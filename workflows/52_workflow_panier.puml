@@ -1,0 +1,33 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+
+start
+:Consulter le catalogue;
+
+if (Produit disponible ?) then (Oui)
+  :Ajouter le produit au panier;
+  :Mettre a jour quantite;
+  :Recalculer total panier;
+
+  if (Supprimer un produit ?) then (Oui)
+    :Supprimer produit du panier;
+    :Recalculer total panier;
+  else (Non)
+  endif
+
+  if (Ajouter un autre produit ?) then (Oui)
+    :Consulter le catalogue;
+  else (Non)
+    :Consulter panier;
+  endif
+
+else (Non)
+  :Afficher indisponible;
+  :Consulter le catalogue;
+endif
+
+:Panier constitué;
+stop
+@enduml

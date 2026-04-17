@@ -1,0 +1,34 @@
+@startuml
+top to bottom direction
+skinparam packageStyle rectangle
+title Diagramme de cas d'utilisation de suivi de l'état de la commande
+
+actor Client
+actor "Employé" as Employe
+actor Pizzaiolo
+actor Livreur
+actor Manager
+
+rectangle "Système HandlePizza" {
+  usecase "Consulter l'état\nde la commande" as UC_ViewStatus
+  usecase "Mettre à jour l'état\nde la commande" as UC_UpdateStatus
+  usecase "Appliquer le cycle de statuts\n(créée, confirmée, en préparation,\nen livraison, livrée, annulée)" as UC_StatusCycle
+  usecase "Notifier les changements\nd'état clés" as UC_Notify
+  usecase "Tracer l'historique\ndes changements d'état" as UC_History
+}
+
+Client --> UC_ViewStatus
+Employe --> UC_ViewStatus
+Employe --> UC_UpdateStatus
+Pizzaiolo --> UC_UpdateStatus
+Livreur --> UC_UpdateStatus
+Manager --> UC_ViewStatus
+
+UC_UpdateStatus ..> UC_StatusCycle : <<include>>
+UC_UpdateStatus ..> UC_History : <<include>>
+UC_UpdateStatus ..> UC_Notify : <<include>>
+
+rectangle "Visibilité temps réel pour\nclient + équipes internes" as NOTE_STATUS
+NOTE_STATUS .. UC_ViewStatus
+
+@enduml

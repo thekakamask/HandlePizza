@@ -1,0 +1,29 @@
+@startuml
+
+' Noir et blanc (sans couleur)
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+
+start
+:Demarrer commande;
+
+if (Employe ?) then (Oui)
+  if (Client existant ?) then (Oui)
+    :Selectionner client;
+  else (Non)
+    :Renseigner les\ninformations clients;
+    :Selectionner client;
+  endif
+else (Non)
+  if (Inscrit ?) then (Oui)
+    :S'authentifier;
+  else (Non)
+    :S'enregistrer;
+    :S'authentifier;
+  endif
+endif
+
+:Client authentifie;
+stop
+@enduml

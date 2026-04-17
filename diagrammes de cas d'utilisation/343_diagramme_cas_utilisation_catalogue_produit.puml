@@ -1,0 +1,40 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+title Diagramme de cas d'utilisation de consultation du catalogue de produits
+
+actor Client
+actor "Employé" as Employe
+actor Manager
+
+rectangle "Système HandlePizza" {
+  usecase "Consulter le catalogue" as UC_ViewCatalog
+  usecase "Consulter la fiche produit\n(composition, prix)" as UC_ViewProduct
+  usecase "Consulter la disponibilité\npar point de vente" as UC_CheckAvailability
+  usecase "Filtrer / rechercher des produits" as UC_Filter
+  usecase "Sélectionner un produit" as UC_SelectProduct
+}
+
+Client --> UC_ViewCatalog
+Client --> UC_ViewProduct
+Client --> UC_Filter
+Client --> UC_SelectProduct
+
+Employe --> UC_ViewCatalog
+Employe --> UC_ViewProduct
+Employe --> UC_CheckAvailability
+Employe --> UC_SelectProduct
+
+Manager --> UC_ViewCatalog
+Manager --> UC_CheckAvailability
+
+UC_ViewCatalog ..> UC_ViewProduct : <<include>>
+UC_ViewCatalog ..> UC_CheckAvailability : <<include>>
+UC_ViewCatalog ..> UC_Filter : <<extend>>\nsi recherche ciblée
+UC_SelectProduct ..> UC_ViewProduct : <<include>>
+
+rectangle "Catalogue affiché selon\nmenu actif + point de vente + stock" as NOTE_CATALOG
+NOTE_CATALOG .. UC_ViewCatalog
+NOTE_CATALOG .. UC_CheckAvailability
+
+@enduml

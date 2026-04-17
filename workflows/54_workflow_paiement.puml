@@ -1,0 +1,32 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+
+start
+:Commande validee;
+:Choisir mode de paiement;
+
+if (Paiement en ligne ?) then (Oui)
+  :Envoyer demande au systeme bancaire;
+  if (Autorisation acceptee ?) then (Oui)
+    :Enregistrer paiement;
+    :Mettre payment_status = validate;
+    :Confirmer paiement au client;
+  else (Non)
+    :Mettre payment_status = cancelled;
+    :Afficher refus paiement;
+    if (Reessayer paiement ?) then (Oui)
+      :Choisir mode de paiement;
+    else (Non)
+      :Sortir du paiement;
+    endif
+  endif
+else (Non)
+  :Paiement differe\n(sur place / livraison);
+  :Mettre payment_status = in_progress;
+  :Enregistrer mode de paiement;
+endif
+
+stop
+@enduml

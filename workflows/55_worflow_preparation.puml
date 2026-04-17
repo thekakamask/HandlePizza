@@ -1,0 +1,32 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+
+start
+:Recevoir commande confirmee;
+:Afficher file des commandes a preparer;
+
+if (Commande prise en charge ?) then (Oui)
+  :Mettre command_status = in_preparation;
+  :Consulter aide-memoire recettes;
+  :Preparer les pizzas;
+  :Mettre a jour progression;
+
+  if (Preparation terminee ?) then (Oui)
+    :Marquer commande prete;
+    if (Mode livraison ?) then (Oui)
+      :Mettre command_status = in_delivery;
+    else (Non)
+      :Mettre commande en attente de retrait;
+    endif
+  else (Non)
+    :Poursuivre preparation;
+  endif
+
+else (Non)
+  :Rester dans file d'attente;
+endif
+
+stop
+@enduml
