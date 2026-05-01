@@ -1,0 +1,30 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+title DS2 - Preparation et distribution
+
+actor Employe
+actor Pizzaiolo
+actor Livreur
+participant "Interface web restaurant" as IWR
+participant "Interface web client" as IWC
+
+Pizzaiolo -> IWR : Commencer preparation
+IWR -> IWR : status=in_preparation
+
+Pizzaiolo -> IWR : Terminer preparation
+
+alt command_type = to_pickup
+  IWR -> IWR : status=ready_to_pick_up
+  Employe -> IWR : Remettre commande en retrait
+  IWR -> IWR : status=delivered
+else command_type = to_delivery
+  Livreur -> IWR : Commencer livraison
+  IWR -> IWR : status=in_delivery
+  Livreur -> IWR : Terminer livraison
+  IWR -> IWR : status=delivered
+end
+
+IWR -> IWC : Publier MAJ statut
+@enduml

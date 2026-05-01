@@ -1,0 +1,36 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+
+start
+:UC 7.2.1 S'identifier;
+
+:UC 7.2.2 Prendre une commande\n(telephone / sur place);
+
+if (Commande confirmee ?) then (Oui)
+  :UC 7.2.3 Commencer la preparation;
+  :UC 7.2.4 Consulter l'aide-memoire recettes;
+  :UC 7.2.5 Terminer la preparation;
+else (Non)
+  stop
+endif
+
+if (command_type = to_pickup ?) then (Oui)
+  :UC 7.2.8 Remettre la commande en retrait;
+  if (Paiement differe ?) then (Oui)
+    :UC 7.2.9 Enregistrer un reglement;
+  endif
+  :UC 7.2.10 Consulter/mettre a jour\nle statut de commande;
+  stop
+else (Non)
+  :UC 7.2.6 Commencer la livraison;
+  :UC 7.2.10 Consulter/mettre a jour\nle statut de commande;
+  :UC 7.2.7 Terminer la livraison;
+  if (Paiement differe ?) then (Oui)
+    :UC 7.2.9 Enregistrer un reglement;
+  endif
+  :UC 7.2.10 Consulter/mettre a jour\nle statut de commande;
+  stop
+endif
+@enduml

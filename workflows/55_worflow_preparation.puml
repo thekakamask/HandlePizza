@@ -18,7 +18,7 @@ if (Commande prise en charge ?) then (Oui)
     if (Mode livraison ?) then (Oui)
       :Mettre command_status = in_delivery;
     else (Non)
-      :Mettre commande en attente de retrait;
+      :Mettre command_status = ready_to_pick_up;
     endif
   else (Non)
     :Poursuivre preparation;

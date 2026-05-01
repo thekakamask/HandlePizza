@@ -1,0 +1,43 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+title DS1 - Parcours commande client (nominal)
+
+actor Client
+participant "Interface web client" as IWC
+participant "Interface web generale" as IWG
+participant "Interface web restaurant" as IWR
+participant "Systeme bancaire" as Bank
+
+Client -> IWC : Consulter produits
+IWC -> IWG : Charger catalogue + disponibilites
+IWG --> IWC : Catalogue filtre par point de vente
+
+Client -> IWC : Ajouter/Supprimer panier
+Client -> IWC : Valider commande
+
+opt Client non authentifie
+  IWC -> IWC : S'identifier
+end
+
+alt command_type = to_delivery
+  IWC -> IWC : Saisir/choisir adresse
+else command_type = to_pickup
+  IWC -> IWC : Confirmer retrait
+end
+
+IWC -> IWR : Creer commande
+IWR -> IWR : status=confirmed
+
+alt Paiement en ligne
+  IWC -> Bank : Autorisation paiement
+  Bank --> IWC : Accepte / Refuse
+  IWC -> IWR : MAJ payment_status
+else Paiement differe
+  IWC -> IWR : payment_status=in_progress
+end
+
+IWR --> IWC : Confirmation commande
+IWC --> Client : Numero + statut initial
+@enduml

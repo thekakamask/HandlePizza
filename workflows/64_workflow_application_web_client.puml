@@ -1,0 +1,42 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+
+start
+
+:UC 6.2.1 Afficher les produits;
+:UC 6.2.2 Ajouter/Supprimer un produit au panier;
+
+if (Panier valide ?) then (Oui)
+  :UC 6.2.3 Valider la commande;
+else (Non)
+  :Retour panier/catalogue;
+  stop
+endif
+
+if (Client authentifie ?) then (Oui)
+else (Non)
+  :UC 6.2.4 S'identifier;
+endif
+
+if (Mode livraison ?) then (Oui)
+  :UC 6.2.6 Saisir/choisir une adresse de livraison;
+else (Non)
+endif
+
+if (Paiement en ligne ?) then (Oui)
+  :UC 6.2.5 Enregistrer le paiement en ligne;
+else (Non)
+endif
+
+:UC 6.2.8 Consulter l'etat de la commande;
+
+if (Commande encore modifiable ?) then (Oui)
+  :UC 6.2.7 Modifier ou annuler une commande;
+else (Non)
+endif
+
+:Fin parcours client;
+stop
+@enduml

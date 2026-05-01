@@ -4,9 +4,10 @@ skinparam shadowing false
 skinparam defaultFontName Arial
 
 start
-:Commande prete;
+:Commande terminee en preparation;
 
-if (Mode retrait ?) then (Oui)
+if (command_type = to_pickup ?) then (Oui)
+  :Mettre command_status = ready_to_pick_up;
   :Appeler le client;
   :Remettre la commande au comptoir;
 

@@ -1,7 +1,7 @@
 @startuml
 left to right direction
 skinparam classAttributeIconSize 0
-title HandlePizza - diagramme réapprovisionnement
+title HandlePizza - diagramme reapprovisionnement
 
 class "supplier" as Supplier {
   +id_supplier : Long
@@ -13,11 +13,12 @@ class "supplier" as Supplier {
 class "supply_order" as SupplyOrder {
   +id_supply_order : Long
   +date : Date
-  +status : String
+  +supply_order_status : supply_order_status : String
 }
 
 class "supply_order_ingredient" as SupplyOrderIngredient <<intertable>> {
   +quantity : Float
+  +unity_type : unity_type : String
 }
 
 class "ingredient" as Ingredient {
@@ -39,13 +40,19 @@ class "employe" as Employe {
 class "manager" as Manager
 class "boss" as Boss
 
-enum "unity_type" as UnityType {
+enum "unity_type : String" as UnityType {
   kg
   l
   u
 }
 
-' Aligné au diagramme global validé
+enum "supply_order_status : String" as SupplyOrderStatus {
+  launched
+  confirmed
+  in_progress
+  completed
+}
+
 Employe <|-- Manager
 Employe <|-- Boss
 
@@ -60,5 +67,6 @@ SupplyOrder "*" -- "1..*" Ingredient
 (SupplyOrder, Ingredient) .. SupplyOrderIngredient
 
 SupplyOrderIngredient "1..*" -- "1" UnityType : unite_commande
+SupplyOrder "*" -- "1" SupplyOrderStatus
 
 @enduml

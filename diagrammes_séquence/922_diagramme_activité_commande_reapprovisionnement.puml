@@ -1,0 +1,51 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+title HandlePizza - Diagramme d'activite (cycle de vie d'une commande de reapprovisionnement)
+
+start
+:Consulter stocks et seuils;
+:Identifier besoins ingredients;
+:Constituer commande fournisseur;
+
+if (Validation direction requise ?) then (Oui)
+  :Soumettre pour validation;
+  if (Validation accordee ?) then (Oui)
+    :Autoriser emission;
+  else (Non)
+    :Commande refusee ou a corriger;
+    stop
+  endif
+else (Non)
+endif
+
+:Emettre commande fournisseur;
+:status = emise;
+:Attendre retour fournisseur;
+
+if (Commande confirmee par fournisseur ?) then (Oui)
+  :status = confirmee;
+else (Non)
+  :Relancer / ajuster commande;
+  stop
+endif
+
+:Reception livraison fournisseur;
+
+if (Livraison complete ?) then (Oui)
+  :Enregistrer quantites recues;
+  :MAJ stocks ingredients;
+  :Recalcul disponibilite produits;
+  :status = livree;
+  :Cloturer commande fournisseur;
+  :status = cloturee;
+else (Non)
+  :Enregistrer reception partielle;
+  :MAJ stocks partielle;
+  :status = partiellement_livree;
+  :Relancer reliquat fournisseur;
+endif
+
+stop
+@enduml

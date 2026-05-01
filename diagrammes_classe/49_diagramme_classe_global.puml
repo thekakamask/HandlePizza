@@ -1,0 +1,214 @@
+@startuml
+left to right direction
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+title HandlePizza - Diagramme de classes global
+
+class "address" as Address {
+  +id_address : Long
+  +number_of_street : Integer
+  +street : String
+  +postal_code : Integer
+  +city : String
+  +additional_informations : String [0..1]
+}
+
+class "account" as Account {
+  +first_name : String
+  +name : String
+  +email : String
+  +phone_number : String
+  +date_of_birth : Date
+  +account_name : String
+  +account_password : String
+}
+
+class "customer" as Customer {
+  +id_customer : Long
+  +client_picture : String [0..1]
+}
+
+class "employe" as Employe {
+  +id_employe : Long
+  +fonction : String
+}
+
+class "command_maker" as CommandMaker
+class "delivery_man" as DeliveryMan
+class "manager" as Manager
+class "boss" as Boss
+
+class "sales_point" as SalesPoint {
+  +id_sales_point : Long
+  +name : String
+  +is_open : Boolean
+}
+
+class "command" as Command {
+  +id_command : Long
+  +command_status : command_status : String
+  +command_type : command_type : String
+  +date : Date
+  +delivery_hours : Integer
+  +name : String
+  +payment_amount : Float
+  +payment_method : payment_method : String
+  +payment_status : payment_status : String
+}
+
+class "basket" as Basket {
+  +id_basket : Long
+  +created_at : DateTime
+  +updated_at : DateTime
+  +is_validated : Boolean
+}
+
+class "basket_pizza" as BasketPizza <<intertable>> {
+  +quantity_same_pizza : Integer
+}
+
+class "pizza" as Pizza {
+  +id_pizza : Long
+  +name : String
+  +picture : String
+  +selling_price : Float
+  +receipt : String
+}
+
+class "ingredient" as Ingredient {
+  +id_ingredient : Long
+  +name : String
+}
+
+class "supplier" as Supplier {
+  +id_supplier : Long
+  +name : String
+  +email : String
+  +phone_number : String
+}
+
+class "supply_order" as SupplyOrder {
+  +id_supply_order : Long
+  +date : Date
+  +status_order_status : supply_order_status : String
+}
+
+enum "supply_order_status : String" as SupplyOrderStatus {
+  launched
+  confirmed
+  in_progress
+  completed
+}
+
+
+class "supply_order_ingredient" as SupplyOrderIngredient <<intertable>> {
+  +quantity : Float
+  +unity_type : unity_type : String
+}
+
+class "command_pizza" as CommandPizza <<intertable>> {
+  +quantity_same_pizza : Integer
+}
+
+class "pizza_ingredient" as PizzaIngredient <<intertable>> {
+  +amount_by_pizza : Float
+}
+
+class "unity_quantity_stock" as UnityQuantityStock <<intertable>> {
+  +name : String
+  +limit_quantity : Boolean
+  +limit_quantity_stock : Float
+  +purchasing_price_per_unit : Float
+  +amount : Float
+  +type_unity_type : unity_type : String
+}
+
+enum "payment_method : String" as PaymentMethod {
+  money
+  paypal
+  credit_card
+}
+
+enum "payment_status : String" as PaymentStatus {
+  in_progress
+  cancelled
+  validate
+}
+
+enum "command_status : String" as CommandStatus {
+  confirmed
+  in_preparation
+  ready_to_pick_up
+  in_delivery
+  delivered
+  cancelled
+}
+
+enum "command_type : String" as CommandType {
+  to_pickup
+  to_delivery
+}
+
+enum "unity_type : String" as UnityType {
+  kg
+  l
+  u
+}
+
+' Héritage (flèches blanches)
+Account <|-- Customer
+Account <|-- Employe
+Employe <|-- CommandMaker
+Employe <|-- DeliveryMan
+Employe <|-- Manager
+Employe <|-- Boss
+
+' Losanges + multiplicités
+SalesPoint "1" o-- "1..*" Employe : affecte
+Customer "1" o-- "0..*" Basket
+Basket "1" o-- "1..*" BasketPizza
+Command "1" o-- "1..*" CommandPizza
+Pizza "1" o-- "0..*" PizzaIngredient
+SupplyOrder "1" o-- "1..*" SupplyOrderIngredient
+SalesPoint "1" o-- "0..*" UnityQuantityStock
+
+' Liens principaux
+Customer "1" -- "0..*" Command
+Address "1" -- "0..*" Command
+Employe "1" -- "0..*" Command
+SalesPoint "1" o-- "0..*" Command
+SalesPoint "1" -- "0..*" Pizza
+Customer "1..*" -- "1..*" Address
+
+Command "*" -- "1" PaymentMethod
+Command "*" -- "1" PaymentStatus
+Command "*" -- "1" CommandStatus
+Command "*" -- "1" CommandType
+
+' Intertables et associations
+Basket "*" -- "1..*" Pizza
+(Basket, Pizza) .. BasketPizza
+Basket "0..1" --> "1" Command : valide_en
+
+Command "*" -- "1..*" Pizza
+(Command, Pizza) .. CommandPizza
+
+Pizza "*" -- "1..*" Ingredient
+(Pizza, Ingredient) .. PizzaIngredient
+
+SalesPoint "1" -- "1..*" Ingredient
+(SalesPoint, Ingredient) .. UnityQuantityStock
+UnityQuantityStock "1..*" -- "1" UnityType
+
+' Réapprovisionnement fournisseur
+Supplier "1" -- "0..*" SupplyOrder
+SalesPoint "1" -- "0..*" SupplyOrder
+Manager "1" -- "0..*" SupplyOrder : cree_par
+Boss "0..1" -- "0..*" SupplyOrder : valide_par
+
+SupplyOrder "*" -- "1..*" Ingredient
+SupplyOrder "*" -- "1" SupplyOrderStatus
+(SupplyOrder, Ingredient) .. SupplyOrderIngredient
+SupplyOrderIngredient "1..*" -- "1" UnityType : unite_commande
+
+@enduml

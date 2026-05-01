@@ -1,0 +1,32 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+title DS3 - Paiement (en ligne et differe)
+
+actor Client
+actor Employe
+actor Livreur
+participant "Interface web client" as IWC
+participant "Interface web restaurant" as IWR
+participant "Systeme bancaire" as Bank
+
+alt Paiement en ligne (client)
+  Client -> IWC : Payer en ligne
+  IWC -> Bank : Demande autorisation
+  Bank --> IWC : Validation / refus
+  IWC -> IWR : MAJ payment_status
+else Paiement differe (retrait/livraison)
+  alt Retrait comptoir
+    Employe -> IWR : Enregistrer reglement
+    IWR -> Bank : Autorisation carte (si necessaire)
+    Bank --> IWR : Validation / refus
+    IWR -> IWR : MAJ payment_status
+  else Livraison
+    Livreur -> IWR : Enregistrer reglement
+    IWR -> Bank : Autorisation carte (si necessaire)
+    Bank --> IWR : Validation / refus
+    IWR -> IWR : MAJ payment_status
+  end
+end
+@enduml

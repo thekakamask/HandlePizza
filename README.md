@@ -7,22 +7,17 @@ L’objectif de ce repository est de produire une documentation projet complète
 ---
 
 ## ✅ **LAST MAJOR UPDATES**
-- Premier commit du repository.
-- Création et structuration du `README`.
-- Première itération du dossier de conception fonctionnelle.
-- Ajout des diagrammes de cas d’utilisation.
-- Ajout des diagrammes de packages.
-- Ajout des diagrammes de classes.
-- Ajout des workflows.
+- Finalisation complète du dossier de conception fonctionnelle.
+- Export du PDF du dossier de conception fonctionnelle.
+- Ajout des diagrammes de séquences
+- Ajout des MPD
 
 ---
 
 ## ❌ **NEXT UPDATES**
-- Finalisation complète du dossier de conception fonctionnelle.
 - Production du dossier de conception technique.
 - Production du dossier d’exploitation.
 - Production du PV de livraison finale.
-- Relecture qualité finale + export PDF des livrables.
 
 ---
 
@@ -49,7 +44,7 @@ L’objectif de ce repository est de produire une documentation projet complète
 
 ## 📦 **DELIVERABLES STATUS**
 - **Dossier de conception fonctionnelle (PDF)**
-  - 🟡 **IN PROGRESS** Structure, rédaction et UML bien avancés.
+  - ✅ **DONE** À Document et export PDF terminé.
 
 - **Dossier de conception technique (PDF)**
   - ⏳ **TODO** À production selon trame projet.

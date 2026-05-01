@@ -22,6 +22,7 @@ class "unity_type" as UnityType <<enumeration>> {
 class "unity_quantity_stock" as UnityQuantityStock <<intertable>> {
   +name : String
   +limit_quantity : Boolean
+  +limit_quantity_stock : Float
   +purchasing_price_per_unit : Float
   +amount : Float
   +type_unity_type : String

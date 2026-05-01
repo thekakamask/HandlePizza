@@ -1,0 +1,60 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+title HandlePizza - Diagramme d'activite (cycle de vie d'une commande client)
+
+start
+:Creation panier;
+:Validation commande;
+
+if (Client authentifie ?) then (Oui)
+else (Non)
+  :Authentification client;
+endif
+
+if (command_type = to_delivery ?) then (Oui)
+  :Saisir/choisir adresse livraison;
+else (Non)
+endif
+
+:Creation commande;
+:status = confirmed;
+
+if (Paiement en ligne ?) then (Oui)
+  :Demande autorisation bancaire;
+  if (Paiement valide ?) then (Oui)
+    :payment_status = validate;
+  else (Non)
+    :payment_status = cancelled;
+    :Nouvelle tentative ou paiement differe;
+  endif
+else (Non)
+  :payment_status = in_progress;
+endif
+
+:Prise en charge cuisine;
+:status = in_preparation;
+:Preparation terminee;
+
+if (command_type = to_pickup ?) then (Oui)
+  :status = ready_to_pick_up;
+  :Remise au client au comptoir;
+  if (Paiement differe ?) then (Oui)
+    :Encaissement;
+    :MAJ payment_status;
+  endif
+  :status = delivered;
+else (Non)
+  :Prise en charge livreur;
+  :status = in_delivery;
+  :Livraison client;
+  if (Paiement differe ?) then (Oui)
+    :Encaissement;
+    :MAJ payment_status;
+  endif
+  :status = delivered;
+endif
+
+stop
+@enduml

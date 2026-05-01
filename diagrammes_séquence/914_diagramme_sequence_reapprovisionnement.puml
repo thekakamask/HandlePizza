@@ -1,0 +1,30 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+title DS4 - Reapprovisionnement fournisseur
+
+actor Manager
+actor "Patron/Direction" as Dir
+actor Fournisseur
+participant "Interface web generale" as IWG
+participant "Interface web restaurant" as IWR
+
+Manager -> IWG : Consulter stocks et seuils
+IWG -> IWG : Detecter seuil bas
+
+Manager -> IWG : Creer commande fournisseur
+opt Validation direction requise
+  IWG -> Dir : Demande validation
+  Dir --> IWG : Validation
+end
+
+IWG -> Fournisseur : Envoyer commande
+Fournisseur --> IWG : Confirmation / expedition
+
+Manager -> IWG : Enregistrer reception
+IWG -> IWG : MAJ stocks ingredient
+
+IWG -> IWR : Transmettre parametres stock/menu
+IWR -> IWR : Recalcul disponibilite produits
+@enduml

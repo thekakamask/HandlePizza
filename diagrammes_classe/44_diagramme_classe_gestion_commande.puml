@@ -5,13 +5,14 @@ title HandlePizza - Diagramme gestion des commandes
 
 class "command" as Command {
   +id_command : Long
-  +command_status : command_status
+  +command_status : command_status : String
+  +command_type : command_type : String
   +date : Date
   +delivery_hours : Integer
   +name : String
   +payment_amount : Float
-  +payment_method : payment_method
-  +payment_status : payment_status
+  +payment_method : payment_method : String
+  +payment_status : payment_status : String
 }
 
 class "customer" as Customer {
@@ -52,21 +53,27 @@ class "command_pizza" as CommandPizza <<intertable>> {
   +quantity_same_pizza : Integer
 }
 
-enum "command_status" as CommandStatus {
+enum "command_status : String" as CommandStatus {
   confirmed
   in_preparation
+  ready_to_pick_up
   in_delivery
   delivered
   cancelled
 }
 
-enum "payment_method" as PaymentMethod {
+enum "command_type : String" as CommandType {
+  to_pickup
+  to_delivery
+}
+
+enum "payment_method : String" as PaymentMethod {
   money
   paypal
   credit_card
 }
 
-enum "payment_status" as PaymentStatus {
+enum "payment_status : String" as PaymentStatus {
   in_progress
   cancelled
   validate
@@ -82,6 +89,7 @@ Employe "1" -- "0..*" Command
 SalesPoint "1" o-- "0..*" Command
 
 Command "*" -- "1" CommandStatus
+Command "*" -- "1" CommandType
 Command "*" -- "1" PaymentMethod
 Command "*" -- "1" PaymentStatus
 

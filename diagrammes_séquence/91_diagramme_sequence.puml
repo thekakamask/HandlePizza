@@ -1,0 +1,61 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+title HandlePizza - Diagramme de sequence (interaction acteurs-systeme)
+
+actor Client
+participant "Interface web client" as IWC
+participant "Interface web restaurant" as IWR
+participant "Interface web generale" as IWG
+participant "Systeme bancaire" as Bank
+actor "Employe" as Emp
+actor "Pizzaiolo" as Piz
+actor "Livreur" as Liv
+
+Client -> IWC : Consulter produits
+IWC -> IWG : Charger catalogue + disponibilites
+IWG --> IWC : Catalogue filtre par point de vente
+
+Client -> IWC : Ajouter/Supprimer panier
+Client -> IWC : Valider commande
+IWC -> IWC : Authentifier client si necessaire
+IWC -> IWC : Saisir adresse si command_type=to_delivery
+IWC -> IWR : Transmettre commande (status=confirmed)
+
+alt Paiement en ligne
+  IWC -> Bank : Demande autorisation paiement
+  Bank --> IWC : Accepte / Refuse
+  IWC -> IWR : MAJ payment_status
+else Paiement differe
+  IWC -> IWR : payment_status=in_progress
+end
+
+Emp -> IWR : Suivre commande / prise en charge comptoir
+Piz -> IWR : Commencer preparation
+IWR -> IWR : status=in_preparation
+Piz -> IWR : Terminer preparation
+
+alt Commande retrait
+  IWR -> IWR : status=ready_to_pick_up
+  Emp -> IWR : Remettre commande
+  opt Paiement differe
+    Emp -> Bank : Encaissement carte (si necessaire)
+    Bank --> Emp : Validation / refus
+    Emp -> IWR : MAJ payment_status
+  end
+  IWR -> IWR : status=delivered
+else Commande livraison
+  Liv -> IWR : Commencer livraison
+  IWR -> IWR : status=in_delivery
+  Liv -> IWR : Terminer livraison
+  opt Paiement differe
+    Liv -> Bank : Encaissement carte (si necessaire)
+    Bank --> Liv : Validation / refus
+    Liv -> IWR : MAJ payment_status
+  end
+  IWR -> IWR : status=delivered
+end
+
+IWR -> IWC : Publier statut pour suivi client
+@enduml

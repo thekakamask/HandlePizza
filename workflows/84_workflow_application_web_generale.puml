@@ -1,0 +1,41 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+
+start
+:UC 8.2.1 S'identifier;
+
+if (Role = Manager ?) then (Oui)
+  :Acces perimetre magasin;
+else (Non)
+  :Acces perimetre reseau (Direction);
+endif
+
+fork
+  :UC 8.2.2 Gerer le catalogue pizzas;
+fork again
+  :UC 8.2.3 Gerer les stocks et seuils;
+fork again
+  :UC 8.2.4 Consulter les statistiques d'activite;
+fork again
+  :UC 8.2.5 Consulter les avis clients;
+fork again
+  :UC 8.2.6 Gerer les commandes fournisseur;
+end fork
+
+if (Seuil stock atteint ?) then (Oui)
+  :Declencher UC 8.2.6\nGerer les commandes fournisseur;
+else (Non)
+endif
+
+if (Reception fournisseur enregistree ?) then (Oui)
+  :Mettre a jour stocks;
+  :Recalculer disponibilite produits;
+else (Non)
+endif
+
+:Synchroniser les referentiels\nvers interfaces client/restaurant;
+:Mettre a jour les indicateurs de pilotage;
+stop
+@enduml
