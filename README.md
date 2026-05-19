@@ -12,10 +12,14 @@ L’objectif de ce repository est de produire une documentation projet complète
 - Ajout des diagrammes de séquences
 - Ajout des MPD
 
+- Ajout et finalisation complète du dossier de conception technique.
+- Export du PDF du dossier de conception technique.
+- Ajout du diagramme de composants.
+- Ajout du diagramme de déploiement.
+
 ---
 
 ## ❌ **NEXT UPDATES**
-- Production du dossier de conception technique.
 - Production du dossier d’exploitation.
 - Production du PV de livraison finale.
 
@@ -47,7 +51,7 @@ L’objectif de ce repository est de produire une documentation projet complète
   - ✅ **DONE** À Document et export PDF terminé.
 
 - **Dossier de conception technique (PDF)**
-  - ⏳ **TODO** À production selon trame projet.
+  - ✅ **DONE** À production selon trame projet.
 
 - **Dossier d’exploitation (PDF)**
   - ⏳ **TODO** À production selon trame projet.
