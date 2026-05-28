@@ -7,13 +7,13 @@ L’objectif de ce repository est de produire une documentation projet complète
 ---
 
 ## ✅ **LAST MAJOR UPDATES**
-- Ajout et finalisation complète du dossier d'exploitation.
-- Export du PDF du dossier d'exploitation.
+- Ajout et finalisation complète du PV de livraison final.
+- Export du PDF du PV de livraison final.
 
 ---
 
 ## ❌ **NEXT UPDATES**
-- Production du PV de livraison finale.
+- Projet terminé.
 
 ---
 
@@ -49,7 +49,7 @@ L’objectif de ce repository est de produire une documentation projet complète
   - ✅ **DONE** À Document et export PDF terminé.
 
 - **PV de livraison finale (PDF)**
-  - ⏳ **TODO** À production en fin de cycle documentaire.
+  - ✅ **DONE** À Document et export PDF terminé.
 
 ---
 
